@@ -96,9 +96,10 @@ class ArtifactRepository:
                 error_code=INVALID_PARAMETER_VALUE)
 
         def download_file(fullpath):
-            dirpath, _ = posixpath.split(fullpath)
-            local_dir_path = os.path.join(dst_path, remove_leading_slash_in_abspath(dirpath))
-            local_file_path = os.path.join(dst_path, remove_leading_slash_in_abspath(fullpath))
+            full_local_path = remove_leading_slash_in_abspath(fullpath)
+            dirpath, _ = posixpath.split(full_local_path)
+            local_dir_path = os.path.join(dst_path, dirpath)
+            local_file_path = os.path.join(dst_path, full_local_path)
             if not os.path.exists(local_dir_path):
                 os.makedirs(local_dir_path)
             self._download_file(remote_file_path=fullpath, local_path=local_file_path)
@@ -151,6 +152,11 @@ class ArtifactRepository:
         pass
 
 def remove_leading_slash_in_abspath(path):
+    """
+    Removes leading slash if path is a abspath
+    
+    :param path: The path
+    """
     if os.path.isabs(path):
         return path[1:]
     else:
