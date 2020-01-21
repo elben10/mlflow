@@ -96,7 +96,7 @@ class ArtifactRepository:
                 error_code=INVALID_PARAMETER_VALUE)
 
         def download_file(fullpath):
-            if os.path.is_abs(fullpath):
+            if os.path.isabs(fullpath):
                 fullpath = fullpath[1:]
             dirpath, _ = posixpath.split(fullpath)
             local_dir_path = os.path.join(dst_path, dirpath)
