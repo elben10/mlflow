@@ -96,11 +96,9 @@ class ArtifactRepository:
                 error_code=INVALID_PARAMETER_VALUE)
 
         def download_file(fullpath):
-            if os.path.isabs(fullpath):
-                fullpath = fullpath[1:]
             dirpath, _ = posixpath.split(fullpath)
-            local_dir_path = os.path.join(dst_path, dirpath)
-            local_file_path = os.path.join(dst_path, fullpath)
+            local_dir_path = os.path.join(dst_path, remove_leading_slash_in_abspath(dirpath))
+            local_file_path = os.path.join(dst_path, remove_leading_slash_in_abspath(fullpath))
             if not os.path.exists(local_dir_path):
                 os.makedirs(local_dir_path)
             self._download_file(remote_file_path=fullpath, local_path=local_file_path)
@@ -152,6 +150,11 @@ class ArtifactRepository:
         """
         pass
 
+def remove_leading_slash_in_abspath(path):
+    if os.path.isabs(path):
+        return path[1:]
+    else:
+        return path
 
 def verify_artifact_path(artifact_path):
     if artifact_path and path_not_unique(artifact_path):
